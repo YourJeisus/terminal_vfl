@@ -1341,21 +1341,7 @@ document.addEventListener('click', function(e) {
 
   // Generate slides from banner images
   var bannerImages = [
-    'images/banner/kd_01.jpeg',
-    'images/banner/kd_02.jpg',
-    'images/banner/kd_03.jpg',
-    'images/banner/kd_04.webp',
-    'images/banner/mi_01.webp',
-    'images/banner/mi_02.webp',
-    'images/banner/mi_03.webp',
-    'images/banner/pa_01.jpeg',
-    'images/banner/pa_02.png',
-    'images/banner/pa_03.jpg',
-    'images/banner/pa_04.jpeg',
-    'images/banner/zp_01.jpg',
-    'images/banner/zp_02.jpg',
-    'images/banner/zp_03.jpg',
-    'images/banner/zp_04.jpg'
+    'images/main_screen/vfl-main.webp'
   ];
 
   track.innerHTML = '';
