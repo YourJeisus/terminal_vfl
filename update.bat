@@ -34,11 +34,11 @@ echo  [OK] Git installed.
 if not exist "%~dp0.git\" goto :do_clone
 echo.
 echo  Pulling latest changes...
-git pull origin master
+git pull origin main
 if %errorlevel% equ 0 goto :check_python
 echo  [!] Pull failed. Resetting...
-git fetch origin master
-git reset --hard origin/master
+git fetch origin main
+git reset --hard origin/main
 if %errorlevel% equ 0 goto :check_python
 echo  [!] Reset failed.
 goto :zip_update
@@ -46,7 +46,7 @@ goto :zip_update
 :do_clone
 echo.
 echo  Cloning repository...
-git clone https://github.com/YourJeisus/TERMINAL_VG.git "%~dp0_clone_tmp"
+git clone https://github.com/YourJeisus/terminal_vfl.git "%~dp0_clone_tmp"
 if %errorlevel% neq 0 goto :clone_fail
 xcopy /s /y /q "%~dp0_clone_tmp\*" "%~dp0" >nul 2>&1
 rmdir /s /q "%~dp0_clone_tmp" >nul 2>&1
@@ -63,13 +63,13 @@ echo.
 echo  Downloading ZIP from GitHub...
 set "REPO_ZIP=%TEMP%\terminal_vg.zip"
 set "REPO_DIR=%TEMP%\terminal_vg_ext"
-powershell -NoProfile -Command "$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri 'https://github.com/YourJeisus/TERMINAL_VG/archive/refs/heads/master.zip' -OutFile '%REPO_ZIP%' -UseBasicParsing"
+powershell -NoProfile -Command "$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri 'https://github.com/YourJeisus/terminal_vfl/archive/refs/heads/main.zip' -OutFile '%REPO_ZIP%' -UseBasicParsing"
 if not exist "%REPO_ZIP%" goto :update_fail
 echo  Extracting...
 if exist "%REPO_DIR%" rmdir /s /q "%REPO_DIR%" >nul 2>&1
 powershell -NoProfile -Command "Expand-Archive -Path '%REPO_ZIP%' -DestinationPath '%REPO_DIR%' -Force"
-if not exist "%REPO_DIR%\TERMINAL_VG-master\" goto :update_fail
-xcopy /s /y /q "%REPO_DIR%\TERMINAL_VG-master\*" "%~dp0" >nul 2>&1
+if not exist "%REPO_DIR%\terminal_vfl-main\" goto :update_fail
+xcopy /s /y /q "%REPO_DIR%\terminal_vfl-main\*" "%~dp0" >nul 2>&1
 del /q "%REPO_ZIP%" >nul 2>&1
 rmdir /s /q "%REPO_DIR%" >nul 2>&1
 echo  [OK] Updated from ZIP.
