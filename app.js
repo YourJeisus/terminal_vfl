@@ -305,6 +305,8 @@ const screenMap = {
   'skypark': 'screen-skypark',
   'rental': 'screen-rental',
   'instructors': 'screen-instructors',
+  'registration': 'screen-registration',
+  'registration-success': 'screen-registration-success',
   'payment': 'screen-payment',
   'sbp': 'screen-sbp',
   'success': 'screen-success'
@@ -1291,6 +1293,35 @@ function printAllTickets(onAllDone) {
   }
 
   setTimeout(function() { printNext(0); }, 500);
+}
+
+function printRegistrationPrecheck() {
+  if (typeof TicketService === 'undefined' || !TicketService.createRegistrationPrecheck) {
+    showAlert('Сервис печати не готов');
+    return;
+  }
+
+  var precheck = TicketService.createRegistrationPrecheck();
+  showPrintLoader();
+
+  var printDone = false;
+  function onRegistrationPrinted() {
+    if (printDone) return;
+    printDone = true;
+    hidePrintLoader();
+    navigateTo('registration-success');
+    lucide.createIcons();
+  }
+
+  try {
+    TicketService.printRegistrationPrecheck(precheck, onRegistrationPrinted);
+  } catch (e) {
+    console.error('Registration precheck print failed:', e);
+    hidePrintLoader();
+    showAlert('Не удалось напечатать QR-предчек');
+  }
+
+  setTimeout(onRegistrationPrinted, 8000);
 }
 
 // Success countdown

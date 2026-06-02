@@ -96,6 +96,22 @@
           </div>
         </div>
 
+        <!-- Регистрация для посещения раздевалки и душа -->
+        <section class="registration-entry" onclick="navigateTo('registration')">
+          <div class="registration-entry-icon">
+            <i data-lucide="qr-code"></i>
+          </div>
+          <div class="registration-entry-copy">
+            <span class="registration-entry-kicker">Бесплатно</span>
+            <h2 class="registration-entry-title">Регистрация</h2>
+            <p class="registration-entry-desc">Для посещения раздевалки и душа</p>
+          </div>
+          <button class="registration-entry-btn">
+            <i data-lucide="printer"></i>
+            <span>Получить QR</span>
+          </button>
+        </section>
+
         <!-- Горнолыжный комплекс (скрыт) -->
         <!--
         <section class="section">
@@ -674,6 +690,78 @@
 
       <div class="screen-bottom">
         <button class="btn btn-outline btn-wide" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Регистрация для посещения раздевалки и душа -->
+    <div class="screen" id="screen-registration" style="background:linear-gradient(rgba(0,0,0,0.86),rgba(0,0,0,0.9)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/vfla_logo_header.svg" class="header-logo-img header-logo-img--sm" alt="ВФЛА">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="registration-wrap">
+        <div class="registration-card">
+          <div class="registration-hero">
+            <div class="registration-hero-icon"><i data-lucide="qr-code"></i></div>
+            <div class="registration-hero-copy">
+              <span class="registration-kicker">Раздевалка и душ</span>
+              <h1 class="registration-title">Регистрация посещения</h1>
+              <p class="registration-subtitle">Получите бесплатный QR-предчек для прохода в зону раздевалки и душа.</p>
+            </div>
+          </div>
+
+          <div class="registration-info-grid">
+            <div class="registration-info-item">
+              <span class="registration-info-label">Стоимость</span>
+              <strong>0 ₽</strong>
+            </div>
+            <div class="registration-info-item">
+              <span class="registration-info-label">Документ</span>
+              <strong>QR-предчек</strong>
+            </div>
+            <div class="registration-info-item">
+              <span class="registration-info-label">Где использовать</span>
+              <strong>Раздевалка и душ</strong>
+            </div>
+          </div>
+
+          <div class="registration-preview">
+            <div class="registration-preview-paper">
+              <div class="registration-preview-title">ПРЕДЧЕК</div>
+              <div class="registration-preview-text">Посещение раздевалки и душа</div>
+              <div class="registration-preview-qr"><i data-lucide="qr-code"></i></div>
+              <div class="registration-preview-price">БЕСПЛАТНО</div>
+            </div>
+          </div>
+
+          <button class="registration-print-btn" onclick="printRegistrationPrecheck()">
+            <i data-lucide="printer"></i>
+            <span>Напечатать QR-предчек</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Успешная регистрация -->
+    <div class="screen" id="screen-registration-success" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.9)),url('images/bg_terminal.png') center/cover no-repeat">
+      <div class="registration-success-wrap">
+        <div class="registration-success-card">
+          <div class="success-icon-wrap">
+            <svg class="success-check" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="38" stroke="#2ECC71" stroke-width="4"/>
+              <path d="M24 40L35 51L56 30" stroke="#2ECC71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="success-title">Регистрация завершена</h2>
+          <p class="success-subtitle">QR-предчек напечатан. Используйте его для прохода в раздевалку и душ.</p>
+          <button class="registration-success-btn" onclick="navigateTo('main')">На главный экран</button>
+        </div>
       </div>
     </div>
 

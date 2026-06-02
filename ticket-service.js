@@ -49,6 +49,27 @@ const TicketService = {
     return ticket;
   },
 
+  createRegistrationPrecheck() {
+    const now = new Date();
+    const date = now.toLocaleDateString('ru-RU', {
+      day: '2-digit', month: '2-digit', year: 'numeric'
+    }) + ' ' + now.toLocaleTimeString('ru-RU', {
+      hour: '2-digit', minute: '2-digit'
+    });
+    const number = this.getNextNumber().replace('VG-', 'VFL-REG-');
+
+    return {
+      number: number,
+      type: 'Регистрация посещения раздевалки и душа',
+      totalPrice: 0,
+      cashier: 'Терминал №1',
+      date: date,
+      dateISO: now.toISOString(),
+      qrCode: 'VFLA-DRESSING-SHOWER:' + number,
+      status: 'registration'
+    };
+  },
+
   formatTicketType(items) {
     if (items.length === 0) return 'Неизвестный';
     if (items.length === 1 && items[0].qty === 1) {
@@ -250,6 +271,163 @@ const TicketService = {
         self._printViaBrowser(self.generateTicketContent(ticket), onDone);
       }
     });
+  },
+
+  printRegistrationPrecheck(precheck, onDone) {
+    var self = this;
+    var dataURL = this._renderRegistrationPrecheckCanvas(precheck);
+
+    this._printViaServer(dataURL, function(success) {
+      if (success) {
+        console.log('[PRINT] Registration precheck sent: ' + precheck.number);
+        if (onDone) setTimeout(onDone, 500);
+      } else {
+        console.log('[PRINT] Server unavailable, fallback window.print()');
+        self._printViaBrowser(self.generateRegistrationPrecheckContent(precheck), onDone);
+      }
+    });
+  },
+
+  generateRegistrationPrecheckContent(precheck) {
+    var qrCode = precheck.qrCode || precheck.number;
+    var qrBigURL = this.generateQRDataURL(qrCode, 190);
+
+    return '<div class="t">' +
+      '<div class="tw"><div class="tt">Предчек</div><div class="tp">Регистрация посещения раздевалки и душа</div></div>' +
+      '<div class="ln"></div>' +
+      '<div class="it">' +
+      '<div class="ir"><span class="il">Стоимость</span><span class="iv">0 ₽</span></div>' +
+      '<div class="ir"><span class="il">Дата</span><span class="iv">' + precheck.date + '</span></div>' +
+      '<div class="ir"><span class="il">Номер</span><span class="iv">' + precheck.number + '</span></div>' +
+      '</div>' +
+      '<div class="ln"></div>' +
+      '<div class="ss"><div class="st">Для прохода - отсканируйте этот код:</div>' +
+      '<div class="qb"><img src="' + qrBigURL + '"></div></div>' +
+      '<div class="ln"></div>' +
+      '<div class="ct">+7 (495) 637-94-20</div>' +
+      '<div class="ct"><span>ВФЛА</span></div>' +
+      '</div>';
+  },
+
+  _renderRegistrationPrecheckCanvas(precheck) {
+    var W = 576;
+    var S = W / 302;
+    var PAD = Math.floor(20 * S);
+    var canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = 1000;
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, W, canvas.height);
+    ctx.fillStyle = '#000';
+
+    var y = Math.floor(24 * S);
+
+    ctx.font = '900 ' + Math.floor(28 * S) + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ВФЛА', W / 2, y + Math.floor(28 * S));
+    y += Math.floor(44 * S);
+
+    ctx.fillRect(PAD, y, W - PAD * 2, 2); y += Math.floor(22 * S);
+
+    ctx.font = '900 ' + Math.floor(25 * S) + 'px sans-serif';
+    ctx.fillText('Предчек', W / 2, y + Math.floor(25 * S));
+    y += Math.floor(34 * S);
+
+    ctx.font = '800 ' + Math.floor(12 * S) + 'px sans-serif';
+    var title = 'Регистрация посещения раздевалки и душа';
+    var maxWidth = W - PAD * 2;
+    var words = title.split(' ');
+    var line = words[0];
+    var lines = [];
+    for (var i = 1; i < words.length; i++) {
+      var test = line + ' ' + words[i];
+      if (ctx.measureText(test).width > maxWidth) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    lines.push(line);
+    for (var l = 0; l < lines.length; l++) {
+      ctx.fillText(lines[l], W / 2, y + Math.floor(14 * S));
+      y += Math.floor(16 * S);
+    }
+    y += Math.floor(16 * S);
+
+    ctx.fillRect(PAD, y, W - PAD * 2, 2); y += Math.floor(16 * S);
+
+    var fontSize = Math.floor(12 * S);
+    var rows = [
+      ['Стоимость', '0 ₽'],
+      ['Дата', precheck.date],
+      ['Номер', precheck.number]
+    ];
+    for (var r = 0; r < rows.length; r++) {
+      ctx.textAlign = 'left';
+      ctx.font = '700 ' + fontSize + 'px sans-serif';
+      ctx.fillText(rows[r][0], PAD, y + fontSize);
+      ctx.textAlign = 'right';
+      ctx.font = '600 ' + fontSize + 'px sans-serif';
+      ctx.fillText(rows[r][1], W - PAD, y + fontSize);
+      y += Math.floor(18 * S);
+    }
+    y += Math.floor(8 * S);
+
+    ctx.fillRect(PAD, y, W - PAD * 2, 2); y += Math.floor(18 * S);
+
+    ctx.font = '800 ' + fontSize + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Для прохода - отсканируйте этот код:', W / 2, y + fontSize);
+    y += Math.floor(34 * S);
+
+    var qrCode = precheck.qrCode || precheck.number;
+    var qrSize = Math.floor(165 * S);
+    var qr = qrcode(0, 'L');
+    qr.addData(qrCode);
+    qr.make();
+    var mc = qr.getModuleCount();
+    var cs = Math.floor(qrSize / mc);
+    var qs = cs * mc;
+    var qx = (W - qs) / 2;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(qx - 4, y - 4, qs + 8, qs + 8);
+    ctx.fillStyle = '#000';
+    for (var qrRow = 0; qrRow < mc; qrRow++) {
+      for (var qrCol = 0; qrCol < mc; qrCol++) {
+        if (qr.isDark(qrRow, qrCol)) {
+          ctx.fillRect(qx + qrCol * cs, y + qrRow * cs, cs, cs);
+        }
+      }
+    }
+    y += qs + Math.floor(12 * S);
+
+    ctx.fillRect(PAD, y, W - PAD * 2, Math.floor(2 * S)); y += Math.floor(14 * S);
+
+    ctx.font = '800 ' + fontSize + 'px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('+7 (495) 637-94-20', PAD, y + fontSize);
+    ctx.textAlign = 'right';
+    ctx.fillText('ВФЛА', W - PAD, y + fontSize);
+    y += Math.floor(24 * S);
+
+    var trimmed = document.createElement('canvas');
+    trimmed.width = W;
+    trimmed.height = y;
+    trimmed.getContext('2d').drawImage(canvas, 0, 0);
+
+    var rotated = document.createElement('canvas');
+    rotated.width = trimmed.width;
+    rotated.height = trimmed.height;
+    var rctx = rotated.getContext('2d');
+    rctx.translate(rotated.width / 2, rotated.height / 2);
+    rctx.rotate(Math.PI);
+    rctx.drawImage(trimmed, -rotated.width / 2, -rotated.height / 2);
+
+    return rotated.toDataURL('image/png');
   },
 
   // Draw entire ticket on Canvas (576px = 80mm at 203 DPI)
