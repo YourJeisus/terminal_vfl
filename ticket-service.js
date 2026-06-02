@@ -218,7 +218,7 @@ const TicketService = {
       '<div class="ss"><div class="st">Для прохода - отсканируйте этот код:</div>' +
       '<div class="qb"><img src="' + qrBigURL + '"></div></div>' +
       '<div class="ln"></div>' +
-      '<div class="ct">+7 (495) 123-82-61</div>' +
+      '<div class="ct">+7 (495) 637-94-20</div>' +
       '<div class="ct"><span>srkvg.ru</span></div>' +
       '</div>';
   },
@@ -375,7 +375,7 @@ const TicketService = {
     // Footer — phone left, site right (space-between in design)
     ctx.font = '800 ' + fontSize + 'px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('+7 (495) 123-82-61', PAD, y + fontSize);
+    ctx.fillText('+7 (495) 637-94-20', PAD, y + fontSize);
     ctx.textAlign = 'right';
     ctx.fillText('srkvg.ru', W - PAD, y + fontSize);
     y += Math.floor(24 * S);
