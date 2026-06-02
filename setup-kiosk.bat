@@ -13,7 +13,7 @@ if %errorlevel% neq 0 (
 
 set "INSTALL_DIR=%~dp0"
 set "KIOSK_USER=TerminalKiosk"
-set "KIOSK_PASS=Vg$Kiosk2026!"
+set "KIOSK_PASS=vfla00"
 
 echo.
 echo  ==========================================
