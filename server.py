@@ -78,18 +78,34 @@ def print_image_gdi(img_bytes):
         hdc.StartDoc("TerminalVG_Ticket")
         hdc.StartPage()
 
-        # Get printer page size in pixels
-        page_w = hdc.GetDeviceCaps(110)  # PHYSICALWIDTH
-        page_h = hdc.GetDeviceCaps(111)  # PHYSICALHEIGHT
+        # Thermal printer drivers may report a large logical page
+        # (for example A4). Never upscale the receipt to that size.
+        printable_w = hdc.GetDeviceCaps(8)    # HORZRES
+        printable_h = hdc.GetDeviceCaps(10)   # VERTRES
+        page_w = hdc.GetDeviceCaps(110)       # PHYSICALWIDTH
+        page_h = hdc.GetDeviceCaps(111)       # PHYSICALHEIGHT
+        dpi_x = hdc.GetDeviceCaps(88)         # LOGPIXELSX
+        dpi_y = hdc.GetDeviceCaps(90)         # LOGPIXELSY
 
-        # Scale image to fit page width
+        # Scale down only if the image is wider than the reported printable area.
+        # Do not fit by height: receipt printers use a paper roll, not a fixed page.
         w, h = img.size
-        ratio = min(page_w / w, page_h / h)
+        target_w = printable_w or page_w or w
+        ratio = min(1.0, target_w / w)
         new_w = int(w * ratio)
         new_h = int(h * ratio)
 
-        # Center horizontally
-        x = (page_w - new_w) // 2
+        print(
+            "[PRINT] "
+            f"image={w}x{h}, "
+            f"horzres={printable_w}, vertres={printable_h}, "
+            f"physical={page_w}x{page_h}, dpi={dpi_x}x{dpi_y}, "
+            f"draw={new_w}x{new_h}, ratio={ratio:.3f}"
+        )
+
+        # Align to the left edge. Centering on a bogus wide page can move
+        # the receipt away from the actual thermal paper area.
+        x = 0
         y = 0
 
         dib = ImageWin.Dib(img)
@@ -150,6 +166,7 @@ class TerminalHandler(http.server.SimpleHTTPRequestHandler):
                 img_data = img_data.split(',', 1)[1]
 
             img_bytes = base64.b64decode(img_data)
+            self._log_print_payload(img_bytes)
 
             if sys.platform == "win32" and PRINTER_NAME:
                 success, message = print_image_gdi(img_bytes)
@@ -175,6 +192,15 @@ class TerminalHandler(http.server.SimpleHTTPRequestHandler):
                 'success': False,
                 'message': str(e)
             }).encode())
+
+    def _log_print_payload(self, img_bytes):
+        """Log received print image dimensions for printer diagnostics."""
+        try:
+            from PIL import Image
+            with Image.open(io.BytesIO(img_bytes)) as img:
+                print(f"[PRINT] received PNG {img.size[0]}x{img.size[1]}, {len(img_bytes)} bytes")
+        except Exception as e:
+            print(f"[PRINT] received {len(img_bytes)} bytes, image inspect failed: {e}")
 
     def _handle_api_proxy(self):
         """Proxy POST to external ticket API — injects credentials from .env."""
