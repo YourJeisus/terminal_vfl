@@ -6,6 +6,7 @@ import base64
 import io
 import sys
 import os
+import time
 
 # --- Load .env file ---
 def load_env(path='.env'):
@@ -39,6 +40,8 @@ if not TERMINAL_CODE:
 
 PRINTER = None
 PRINTER_NAME = None
+RECENT_PRINT_JOBS = {}
+REGISTRATION_PRINT_MIN_INTERVAL = 5.0
 
 def init_printer():
     """Detect default printer on Windows."""
@@ -166,6 +169,18 @@ class TerminalHandler(http.server.SimpleHTTPRequestHandler):
             img_bytes = base64.b64decode(img_data)
             self._log_print_payload(img_bytes)
 
+            job_type = data.get('job_type', '')
+            job_id = data.get('job_id', '')
+            if self._should_suppress_duplicate_print(job_type, job_id):
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': True,
+                    'message': 'Duplicate registration print suppressed'
+                }).encode())
+                return
+
             if sys.platform == "win32" and PRINTER_NAME:
                 success, message = print_image_gdi(img_bytes)
             else:
@@ -199,6 +214,24 @@ class TerminalHandler(http.server.SimpleHTTPRequestHandler):
                 print(f"[PRINT] received PNG {img.size[0]}x{img.size[1]}, {len(img_bytes)} bytes")
         except Exception as e:
             print(f"[PRINT] received {len(img_bytes)} bytes, image inspect failed: {e}")
+
+    def _should_suppress_duplicate_print(self, job_type, job_id):
+        """Prevent accidental print storms from repeated registration taps."""
+        if job_type != 'registration-precheck':
+            return False
+
+        now = time.monotonic()
+        last = RECENT_PRINT_JOBS.get(job_type, 0)
+        if now - last < REGISTRATION_PRINT_MIN_INTERVAL:
+            print(
+                "[PRINT] suppressed duplicate "
+                f"job_type={job_type}, job_id={job_id}, "
+                f"delta={now - last:.2f}s"
+            )
+            return True
+
+        RECENT_PRINT_JOBS[job_type] = now
+        return False
 
     def _handle_api_proxy(self):
         """Proxy POST to external ticket API — injects credentials from .env."""

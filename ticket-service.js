@@ -285,6 +285,9 @@ const TicketService = {
         console.log('[PRINT] Server unavailable, fallback window.print()');
         self._printViaBrowser(self.generateRegistrationPrecheckContent(precheck), onDone);
       }
+    }, {
+      jobType: 'registration-precheck',
+      jobId: precheck.number
     });
   },
 
@@ -577,8 +580,9 @@ const TicketService = {
   },
 
   // Send PNG to local print server (Python GDI)
-  _printViaServer(dataURL, callback) {
+  _printViaServer(dataURL, callback, options) {
     if (!dataURL) { callback(false); return; }
+    options = options || {};
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:9999/print', true);
@@ -592,7 +596,11 @@ const TicketService = {
     };
     xhr.onerror = function() { callback(false); };
     xhr.ontimeout = function() { callback(false); };
-    xhr.send(JSON.stringify({ image: dataURL }));
+    xhr.send(JSON.stringify({
+      image: dataURL,
+      job_type: options.jobType || '',
+      job_id: options.jobId || ''
+    }));
   },
 
   // Fallback: window.print() with #print-area

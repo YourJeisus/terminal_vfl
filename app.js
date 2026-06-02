@@ -1295,11 +1295,34 @@ function printAllTickets(onAllDone) {
   setTimeout(function() { printNext(0); }, 500);
 }
 
-function printRegistrationPrecheck() {
+var registrationPrintInProgress = false;
+
+function setRegistrationPrintButtonDisabled(disabled) {
+  var btn = document.querySelector('.registration-print-btn');
+  if (!btn) return;
+  btn.disabled = disabled;
+  btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+  btn.classList.toggle('is-loading', disabled);
+}
+
+function printRegistrationPrecheck(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  if (registrationPrintInProgress) {
+    console.warn('[PRINT] Registration precheck already in progress, ignoring duplicate request');
+    return;
+  }
+
   if (typeof TicketService === 'undefined' || !TicketService.createRegistrationPrecheck) {
     showAlert('Сервис печати не готов');
     return;
   }
+
+  registrationPrintInProgress = true;
+  setRegistrationPrintButtonDisabled(true);
 
   var precheck = TicketService.createRegistrationPrecheck();
   showPrintLoader();
@@ -1308,6 +1331,8 @@ function printRegistrationPrecheck() {
   function onRegistrationPrinted() {
     if (printDone) return;
     printDone = true;
+    registrationPrintInProgress = false;
+    setRegistrationPrintButtonDisabled(false);
     hidePrintLoader();
     navigateTo('registration-success');
     lucide.createIcons();
@@ -1317,6 +1342,8 @@ function printRegistrationPrecheck() {
     TicketService.printRegistrationPrecheck(precheck, onRegistrationPrinted);
   } catch (e) {
     console.error('Registration precheck print failed:', e);
+    registrationPrintInProgress = false;
+    setRegistrationPrintButtonDisabled(false);
     hidePrintLoader();
     showAlert('Не удалось напечатать QR-предчек');
   }

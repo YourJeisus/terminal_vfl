@@ -1035,6 +1035,13 @@ body {
   cursor: pointer;
 }
 
+.registration-print-btn:disabled,
+.registration-print-btn.is-loading {
+  cursor: default;
+  opacity: 0.58;
+  pointer-events: none;
+}
+
 .registration-print-btn [data-lucide] {
   width: 26px;
   height: 26px;
