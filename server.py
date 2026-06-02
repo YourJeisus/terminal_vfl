@@ -78,8 +78,6 @@ def print_image_gdi(img_bytes):
         hdc.StartDoc("TerminalVG_Ticket")
         hdc.StartPage()
 
-        # Thermal printer drivers may report a large logical page
-        # (for example A4). Never upscale the receipt to that size.
         printable_w = hdc.GetDeviceCaps(8)    # HORZRES
         printable_h = hdc.GetDeviceCaps(10)   # VERTRES
         page_w = hdc.GetDeviceCaps(110)       # PHYSICALWIDTH
@@ -87,11 +85,11 @@ def print_image_gdi(img_bytes):
         dpi_x = hdc.GetDeviceCaps(88)         # LOGPIXELSX
         dpi_y = hdc.GetDeviceCaps(90)         # LOGPIXELSY
 
-        # Scale down only if the image is wider than the reported printable area.
-        # Do not fit by height: receipt printers use a paper roll, not a fixed page.
+        # Restore the driver-compatible GDI sizing path, but keep detailed logs.
+        # Some thermal drivers do not visibly print when drawing from x=0 or
+        # when the bitmap is not mapped to the driver's reported page area.
         w, h = img.size
-        target_w = printable_w or page_w or w
-        ratio = min(1.0, target_w / w)
+        ratio = min(page_w / w, page_h / h)
         new_w = int(w * ratio)
         new_h = int(h * ratio)
 
@@ -103,9 +101,7 @@ def print_image_gdi(img_bytes):
             f"draw={new_w}x{new_h}, ratio={ratio:.3f}"
         )
 
-        # Align to the left edge. Centering on a bogus wide page can move
-        # the receipt away from the actual thermal paper area.
-        x = 0
+        x = (page_w - new_w) // 2
         y = 0
 
         dib = ImageWin.Dib(img)
