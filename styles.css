@@ -37,12 +37,13 @@ body {
   background: #000;
   color: var(--text-white);
   overflow: hidden;
+  overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-synthesis: none;
-  touch-action: pan-x pan-y;
-  -ms-touch-action: pan-x pan-y;
+  touch-action: none;
+  -ms-touch-action: none;
 }
 
 #app {

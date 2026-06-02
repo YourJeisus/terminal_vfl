@@ -115,6 +115,10 @@ REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v No
 :: Disable Windows key
 REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoWinKeys /t REG_DWORD /d 1 /f >nul 2>&1
 
+:: Disable Windows touch edge swipes (left/right system gestures)
+REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows\EdgeUI" /v AllowEdgeSwipe /t REG_DWORD /d 0 /f >nul 2>&1
+REG ADD "HKCU\Software\Policies\Microsoft\Windows\EdgeUI" /v AllowEdgeSwipe /t REG_DWORD /d 0 /f >nul 2>&1
+
 :: Disable desktop
 REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoDesktop /t REG_DWORD /d 1 /f >nul 2>&1
 
@@ -126,7 +130,7 @@ REG ADD "HKLM\SOFTWARE\Policies\Google\Chrome" /v DeveloperToolsAvailability /t 
 REG ADD "HKLM\SOFTWARE\Policies\Google\Chrome" /v DownloadRestrictions /t REG_DWORD /d 3 /f >nul 2>&1
 REG ADD "HKLM\SOFTWARE\Policies\Google\Chrome" /v BookmarkBarEnabled /t REG_DWORD /d 0 /f >nul 2>&1
 
-echo       Заблокированы: TaskManager, Win+R, ПКМ, Win key, DevTools
+echo       Заблокированы: TaskManager, Win+R, ПКМ, Win key, Edge swipes, DevTools
 
 echo.
 echo  ==========================================
