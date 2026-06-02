@@ -1,0 +1,7 @@
+node_modules
+pencil
+server.py
+package.json
+package-lock.json
+CLAUDE.md
+.claude

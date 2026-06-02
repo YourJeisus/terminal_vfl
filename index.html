@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Воробьёвы Горы — Спортивно-туристический комплекс</title>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('fonts/Gotham/gotham_light.woff2') format('woff2'),
+           url('fonts/Gotham/gotham_light.otf') format('opentype');
+      font-weight: 300;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('fonts/Gotham/gotham_book.woff2') format('woff2'),
+           url('fonts/Gotham/gotham_book.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('fonts/Gotham/gotham_medium.woff2') format('woff2'),
+           url('fonts/Gotham/gotham_medium.otf') format('opentype');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('fonts/Gotham/gotham_bold.woff2') format('woff2'),
+           url('fonts/Gotham/gotham_bold.otf') format('opentype');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Gotham';
+      src: url('fonts/Gotham/gotham_black.woff2') format('woff2'),
+           url('fonts/Gotham/gotham_black.otf') format('opentype');
+      font-weight: 900;
+      font-display: swap;
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css?v=20260330">
+</head>
+<body>
+  <div id="app">
+    <!-- Экран заставки -->
+    <div class="screen active" id="screen-splash" onclick="navigateTo('main')">
+      <div class="splash-bg"></div>
+      <div class="splash-overlay"></div>
+      <div class="splash-content">
+        <div class="splash-top">
+          <img src="images/VG_logo_masked.svg" class="splash-logo-img" alt="Воробьёвы Горы">
+        </div>
+        <div class="splash-center">
+          <div class="splash-circle">
+            <i data-lucide="hand"></i>
+          </div>
+          <p class="splash-cta" data-i18n="splash.cta">Коснитесь экрана</p>
+          <p class="splash-cta-sub" data-i18n="splash.cta_sub">ЧТОБЫ НАЧАТЬ</p>
+        </div>
+        <div class="splash-bottom">
+          <div class="splash-info"><i data-lucide="thermometer"></i> <span id="splash-weather-temp">—</span></div>
+          <div class="splash-info splash-eskimos">
+            <img src="images/eskimos_logo_trans.png" alt="Eskimos" class="splash-eskimos-logo">
+            <span>Система автоматизации Eskimos.ski</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Главный экран -->
+    <div class="screen" id="screen-main" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header">
+        <div class="header-left">
+          <img src="images/VG_logo_masked.svg" class="header-logo-img" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <!-- Баннер-карусель -->
+        <div class="banner-carousel" id="banner-carousel">
+          <div class="banner-track" id="banner-track">
+          </div>
+          <div class="banner-dots" id="banner-dots">
+          </div>
+        </div>
+
+        <!-- Горнолыжный комплекс (скрыт) -->
+        <!--
+        <section class="section">
+          <h3 class="section-title">Горнолыжный комплекс</h3>
+          <div class="ski-grid">
+            <div class="ski-grid-row">
+              <div class="ski-btn" onclick="navigateTo('scan-card')">
+                <i data-lucide="credit-card" class="ski-btn-icon"></i>
+                <span class="ski-btn-label">Пополнить<br>скипас</span>
+              </div>
+              <div class="ski-btn" onclick="showAlert('Групповые занятия скоро будут доступны')">
+                <i data-lucide="users" class="ski-btn-icon"></i>
+                <span class="ski-btn-label">Групповые<br>занятия</span>
+              </div>
+            </div>
+            <div class="ski-grid-row">
+              <div class="ski-btn" onclick="navigateTo('instructors')">
+                <i data-lucide="user-check" class="ski-btn-icon"></i>
+                <span class="ski-btn-label">Список<br>инструкторов</span>
+              </div>
+              <div class="ski-btn" onclick="navigateTo('rental')">
+                <i data-lucide="snowflake" class="ski-btn-icon"></i>
+                <span class="ski-btn-label">Прокат<br>снаряжения</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        -->
+
+        <!-- Развлечения — карточки с фото -->
+        <div class="ent-grid">
+          <div class="ent-card" onclick="navigateTo('tickets')">
+            <div class="ent-card-photo" style="background-image:url('images/main_screen/square/kanatnaya doroga.png')"></div>
+            <div class="ent-card-gradient"></div>
+            <div class="ent-card-body">
+              <div class="ent-card-btn"><i data-lucide="ticket" class="ent-card-btn-icon"></i><span data-i18n="common.buy_ticket">Купить билет</span></div>
+              <div class="ent-card-bottom">
+                <i data-lucide="cable-car" class="ent-card-icon"></i>
+                <div class="ent-card-text">
+                  <span class="ent-card-title" data-i18n="main.cable_car">Канатная дорога</span>
+                  <span class="ent-card-desc" data-i18n="main.cable_car_desc">Яркая достопримечательность столицы</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ent-card" onclick="navigateTo('alpaka')">
+            <div class="ent-card-photo" style="background-image:url('images/main_screen/square/alpaki.png')"></div>
+            <div class="ent-card-gradient"></div>
+            <div class="ent-card-body">
+              <div class="ent-card-btn"><i data-lucide="ticket" class="ent-card-btn-icon"></i><span data-i18n="common.buy_ticket">Купить билет</span></div>
+              <div class="ent-card-bottom">
+                <i data-lucide="trees" class="ent-card-icon"></i>
+                <div class="ent-card-text">
+                  <span class="ent-card-title" data-i18n="main.alpaka">Парк Альпак</span>
+                  <span class="ent-card-desc" data-i18n="main.alpaka_desc">Пообщаться с животными</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ent-card" onclick="navigateTo('museum')">
+            <div class="ent-card-photo" style="background-image:url('images/main_screen/square/muzei_iluzii.png')"></div>
+            <div class="ent-card-gradient"></div>
+            <div class="ent-card-body">
+              <div class="ent-card-btn"><i data-lucide="ticket" class="ent-card-btn-icon"></i><span data-i18n="common.buy_ticket">Купить билет</span></div>
+              <div class="ent-card-bottom">
+                <i data-lucide="sparkles" class="ent-card-icon"></i>
+                <div class="ent-card-text">
+                  <span class="ent-card-title" data-i18n="main.museum">Музей иллюзий</span>
+                  <span class="ent-card-desc" data-i18n="main.museum_desc">Интерактивное пространство</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ent-card" onclick="navigateTo('skypark')">
+            <div class="ent-card-photo" style="background-image:url('images/main_screen/square/zip_layn.png')"></div>
+            <div class="ent-card-gradient"></div>
+            <div class="ent-card-body">
+              <div class="ent-card-btn"><i data-lucide="ticket" class="ent-card-btn-icon"></i><span data-i18n="common.buy_ticket">Купить билет</span></div>
+              <div class="ent-card-bottom">
+                <i data-lucide="zap" class="ent-card-icon"></i>
+                <div class="ent-card-text">
+                  <span class="ent-card-title" data-i18n="main.skypark">Skypark</span>
+                  <span class="ent-card-desc" data-i18n="main.skypark_desc">Zipline на расстояние 700 метров</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Спейсер -->
+        <div class="main-spacer"></div>
+
+        <!-- Инфо-карточки -->
+        <div class="info-cards-fixed">
+          <div class="info-card">
+            <i data-lucide="thermometer" class="info-card-icon"></i>
+            <span class="info-value" id="weather-temp">—</span>
+            <span class="info-label" data-i18n="info.weather">Погода</span>
+          </div>
+          <div class="info-card">
+            <i data-lucide="calendar" class="info-card-icon"></i>
+            <span class="info-value" id="current-date">—</span>
+            <span class="info-label" id="current-weekday">—</span>
+          </div>
+          <div class="info-card">
+            <i data-lucide="clock" class="info-card-icon"></i>
+            <span class="info-value" id="current-time">—</span>
+            <span class="info-label" data-i18n="info.time">Время</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Easter egg: Statham quote -->
+      <div class="statham-egg" id="statham-egg">
+        <div class="statham-egg-card">
+          <p class="statham-egg-quote" id="statham-egg-quote"></p>
+          <span class="statham-egg-author">— (c) Джейсон Стетхэм</span>
+        </div>
+      </div>
+
+      <!-- Easter egg: DIJI -->
+      <div class="easter-egg" id="easter-egg">
+        <img src="images/diji_devs.png" alt="" class="easter-egg-img">
+      </div>
+
+      <footer class="bottom-bar">
+        <div class="bottom-left">
+          <i data-lucide="phone"></i>
+          <span>+7 (925) 925-59-59</span>
+        </div>
+        <div class="bottom-right">
+          <img src="images/eskimos_logo_trans.png" alt="Eskimos" class="bottom-eskimos-logo">
+          <span class="bottom-eskimos-text">Система автоматизации Eskimos.ski</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Приложите карту -->
+    <div class="screen" id="screen-scan-card">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="scan-wrap">
+        <div class="scan-card">
+          <div class="scan-text-group">
+            <span class="scan-title" data-i18n="scan.title_line1">Приложите карту</span>
+            <span class="scan-title" data-i18n="scan.title_line2">к считывателю</span>
+          </div>
+          <div class="scan-nfc-area" onclick="event.stopPropagation(); navigateTo('topup')" style="cursor:pointer" title="Нажмите для демо перехода">
+            <div class="scan-ring scan-ring--outer"></div>
+            <div class="scan-ring scan-ring--middle"></div>
+            <div class="scan-ring scan-ring--inner"></div>
+            <svg class="scan-nfc-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="white"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-120q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400Z"/></svg>
+          </div>
+          <p class="scan-hint" data-i18n="scan.hint">Поднесите ски-пасс к области считывателя</p>
+        </div>
+      </div>
+
+      <div class="scan-bottom">
+        <button class="scan-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Пополнение скипаса -->
+    <div class="screen" id="screen-topup">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('scan-card')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="topup-wrap">
+        <div class="topup-main-card">
+          <div class="topup-top-bar">
+            <span class="topup-title" data-i18n="topup.title">Пополнение скипаса</span>
+            <span class="topup-season-badge" data-i18n="topup.season">Сезон 2025/26</span>
+          </div>
+
+          <div class="topup-tab-row">
+            <button class="topup-tab topup-tab--active" data-i18n="topup.tab_weekdays">Будни (пн-пт)</button>
+            <button class="topup-tab" data-i18n="topup.tab_weekends">Выходные / праздники</button>
+          </div>
+
+          <div class="topup-cards-list">
+            <!-- Взрослый -->
+            <div class="topup-card">
+              <div class="topup-card-header">
+                <div class="topup-card-info">
+                  <span class="topup-card-name" data-i18n="topup.adult">Взрослый</span>
+                  <span class="topup-card-age" data-i18n="topup.adult_age">от 15 лет</span>
+                </div>
+                <i data-lucide="user" class="topup-card-icon"></i>
+              </div>
+              <div class="topup-prices">
+                <div class="topup-price-cell" onclick="selectPrice(this, 990)">
+                  <span class="topup-price-val">990 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.before_16">до 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 1600)">
+                  <span class="topup-price-val">1 600 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.after_16">после 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 2000)">
+                  <span class="topup-price-val">2 000 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.day_evening">день + вечер</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Детский -->
+            <div class="topup-card">
+              <div class="topup-card-header">
+                <div class="topup-card-info">
+                  <span class="topup-card-name" data-i18n="topup.child">Детский</span>
+                  <span class="topup-card-age" data-i18n="topup.child_age">7 – 14 лет</span>
+                </div>
+                <i data-lucide="baby" class="topup-card-icon"></i>
+              </div>
+              <div class="topup-prices">
+                <div class="topup-price-cell" onclick="selectPrice(this, 690)">
+                  <span class="topup-price-val">690 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.before_16">до 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 1100)">
+                  <span class="topup-price-val">1 100 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.after_16">после 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 1400)">
+                  <span class="topup-price-val">1 400 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.day_evening">день + вечер</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Льготный -->
+            <div class="topup-card">
+              <div class="topup-card-header">
+                <div class="topup-card-info">
+                  <span class="topup-card-name" data-i18n="topup.discount">Льготный</span>
+                  <span class="topup-card-age" data-i18n="topup.discount_desc">пенсионеры, студенты, инвалиды</span>
+                </div>
+                <i data-lucide="heart" class="topup-card-icon"></i>
+              </div>
+              <div class="topup-prices">
+                <div class="topup-price-cell" onclick="selectPrice(this, 690)">
+                  <span class="topup-price-val">690 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.before_16">до 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 1100)">
+                  <span class="topup-price-val">1 100 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.after_16">после 16:00</span>
+                </div>
+                <div class="topup-price-cell" onclick="selectPrice(this, 1400)">
+                  <span class="topup-price-val">1 400 ₽</span>
+                  <span class="topup-price-label" data-i18n="topup.day_evening">день + вечер</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topup-hint">
+            <i data-lucide="info" class="topup-hint-icon"></i>
+            <span class="topup-hint-text" data-i18n="topup.select_hint">Выберите тариф для пополнения</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topup-bottom">
+        <button class="scan-back-btn" onclick="navigateTo('scan-card')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Продажа билетов -->
+    <div class="screen" id="screen-tickets" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="tkt-scroll">
+        <div class="tkt-title-area">
+          <span class="tkt-title">Канатная дорога</span>
+          <i data-lucide="cable-car" class="tkt-title-icon"></i>
+        </div>
+
+        <!-- Карусель фото -->
+        <div class="tkt-carousel" data-carousel>
+          <div class="tkt-carousel-track">
+            <img src="images/main_screen/kanatnaya_doroga.jpeg" alt="Канатная дорога" class="tkt-carousel-slide">
+            <img src="images/main_screen/kanatnaya_doroga_na_vorobyevykh_gorakh_2_YB.jpg" alt="Канатная дорога" class="tkt-carousel-slide">
+          </div>
+          <div class="tkt-carousel-dots"></div>
+        </div>
+
+        <div class="tkt-card">
+          <div class="tkt-rows">
+            <div class="tkt-unavailable" data-i18n="tickets.unavailable">Билеты временно недоступны</div>
+          </div>
+        </div>
+
+        <div class="tkt-description">
+          <p></p>
+        </div>
+      </div>
+
+      <div class="tkt-bottom-bar">
+        <div class="tkt-total">
+          <span class="tkt-total-label" data-i18n="common.total">Итого:</span>
+          <span class="tkt-total-value" id="tickets-total">0 ₽</span>
+        </div>
+        <button class="tkt-pay-btn" onclick="processPayment()" data-i18n="common.pay" style="display:none">ОПЛАТИТЬ</button>
+        <button class="tkt-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Парк Альпак -->
+    <div class="screen" id="screen-alpaka" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right"><button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button></div>
+      </header>
+      <div class="tkt-scroll">
+        <div class="tkt-title-area">
+          <span class="tkt-title">Парк Альпак</span>
+          <i data-lucide="trees" class="tkt-title-icon"></i>
+        </div>
+        <div class="tkt-carousel" data-carousel>
+          <div class="tkt-carousel-track">
+            <img src="images/main_screen/park_alpak.webp" alt="Парк Альпак" class="tkt-carousel-slide">
+          </div>
+          <div class="tkt-carousel-dots"></div>
+        </div>
+        <div class="tkt-card">
+          <div class="tkt-rows">
+            <div class="tkt-unavailable" data-i18n="tickets.unavailable">Билеты временно недоступны</div>
+          </div>
+        </div>
+        <div class="tkt-description">
+          <p></p>
+        </div>
+      </div>
+      <div class="tkt-bottom-bar">
+        <div class="tkt-total">
+          <span class="tkt-total-label" data-i18n="common.total">Итого:</span>
+          <span class="tkt-total-value" id="alpaka-total">0 ₽</span>
+        </div>
+        <button class="tkt-pay-btn" onclick="processPayment()" data-i18n="common.pay" style="display:none">ОПЛАТИТЬ</button>
+        <button class="tkt-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Музей иллюзий -->
+    <div class="screen" id="screen-museum" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right"><button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button></div>
+      </header>
+      <div class="tkt-scroll">
+        <div class="tkt-title-area">
+          <span class="tkt-title">Музей иллюзий</span>
+          <i data-lucide="sparkles" class="tkt-title-icon"></i>
+        </div>
+        <div class="tkt-carousel" data-carousel>
+          <div class="tkt-carousel-track">
+            <img src="images/main_screen/muzei_illuzii.webp" alt="Музей иллюзий" class="tkt-carousel-slide">
+          </div>
+          <div class="tkt-carousel-dots"></div>
+        </div>
+        <div class="tkt-card">
+          <div class="tkt-rows">
+            <div class="tkt-unavailable" data-i18n="tickets.unavailable">Билеты временно недоступны</div>
+          </div>
+        </div>
+        <div class="tkt-description">
+          <p></p>
+        </div>
+      </div>
+      <div class="tkt-bottom-bar">
+        <div class="tkt-total">
+          <span class="tkt-total-label" data-i18n="common.total">Итого:</span>
+          <span class="tkt-total-value" id="museum-total">0 ₽</span>
+        </div>
+        <button class="tkt-pay-btn" onclick="processPayment()" data-i18n="common.pay" style="display:none">ОПЛАТИТЬ</button>
+        <button class="tkt-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Skypark -->
+    <div class="screen" id="screen-skypark" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right"><button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button></div>
+      </header>
+      <div class="tkt-scroll">
+        <div class="tkt-title-area">
+          <span class="tkt-title">Skypark</span>
+          <i data-lucide="zap" class="tkt-title-icon"></i>
+        </div>
+        <div class="tkt-carousel" data-carousel>
+          <div class="tkt-carousel-track">
+            <img src="images/main_screen/zip_layn.jpeg" alt="Skypark" class="tkt-carousel-slide">
+          </div>
+          <div class="tkt-carousel-dots"></div>
+        </div>
+        <div class="tkt-card">
+          <div class="tkt-rows">
+            <div class="tkt-unavailable" data-i18n="tickets.unavailable">Билеты временно недоступны</div>
+          </div>
+        </div>
+        <div class="tkt-description">
+          <p></p>
+        </div>
+      </div>
+      <div class="tkt-bottom-bar">
+        <div class="tkt-total">
+          <span class="tkt-total-label" data-i18n="common.total">Итого:</span>
+          <span class="tkt-total-value" id="skypark-total">0 ₽</span>
+        </div>
+        <button class="tkt-pay-btn" onclick="processPayment()" data-i18n="common.pay" style="display:none">ОПЛАТИТЬ</button>
+        <button class="tkt-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Прокат снаряжения -->
+    <div class="screen" id="screen-rental">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="rent-content">
+        <div class="rent-title-row">
+          <span class="rent-title">Прокат снаряжения</span>
+        </div>
+
+        <div class="rent-cat-tabs">
+          <button class="rent-cat-tab rent-cat-tab--active">Комплект</button>
+          <button class="rent-cat-tab">Лыжи</button>
+          <button class="rent-cat-tab">Ботинки</button>
+          <button class="rent-cat-tab">Ещё</button>
+        </div>
+
+        <div class="rent-order-card">
+          <label class="rent-label">Тип дня</label>
+          <div class="rent-toggle">
+            <button class="rent-toggle-btn rent-toggle-btn--active">Будни (пн-пт)</button>
+            <button class="rent-toggle-btn">Выходные</button>
+          </div>
+
+          <label class="rent-label">Время проката</label>
+          <div class="rent-toggle">
+            <button class="rent-toggle-btn rent-toggle-btn--active">1 час</button>
+            <button class="rent-toggle-btn">+30 мин</button>
+          </div>
+
+          <div class="rent-divider"></div>
+
+          <label class="rent-label">Количество комплектов</label>
+
+          <div class="rent-qty-row" data-price="2000">
+            <span class="rent-qty-pill">Взрослый</span>
+            <div class="rent-qty-spacer"></div>
+            <span class="rent-qty-price">2 000 ₽</span>
+            <div class="rent-counter">
+              <button class="rent-counter-btn rent-counter-btn--minus" onclick="changeRentalQty(this, -1)">−</button>
+              <span class="rent-counter-val">0</span>
+              <button class="rent-counter-btn rent-counter-btn--plus" onclick="changeRentalQty(this, 1)">+</button>
+            </div>
+          </div>
+
+          <div class="rent-qty-row rent-qty-row--selected" data-price="1500">
+            <span class="rent-qty-pill">Детский</span>
+            <div class="rent-qty-spacer"></div>
+            <span class="rent-qty-price">1 500 ₽</span>
+            <div class="rent-counter">
+              <button class="rent-counter-btn rent-counter-btn--plus" onclick="changeRentalQty(this, -1)">−</button>
+              <span class="rent-counter-val">2</span>
+              <button class="rent-counter-btn rent-counter-btn--plus" onclick="changeRentalQty(this, 1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rent-total">
+          <span class="rent-total-label" data-i18n="common.total">Итого:</span>
+          <span class="rent-total-value" id="rental-total">3 000 ₽</span>
+        </div>
+
+        <button class="rent-pay-btn" onclick="processPayment()" data-i18n="common.pay">ОПЛАТИТЬ</button>
+        <button class="rent-back-btn" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Список инструкторов -->
+    <div class="screen" id="screen-instructors">
+      <header class="header">
+        <div class="header-left">
+          <button class="back-btn" onclick="navigateTo('main')"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="instructors-content">
+        <h2 class="page-title">Список инструкторов</h2>
+
+        <div class="tabs">
+          <button class="tab active">Лыжи</button>
+          <button class="tab">Сноуборд</button>
+        </div>
+
+        <div class="instructors-grid">
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-1.jpg')"></div>
+            <h4 class="instructor-name">Иванова Ирина</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-2.jpg')"></div>
+            <h4 class="instructor-name">Петров Алексей</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-3.jpg')"></div>
+            <h4 class="instructor-name">Сидорова Мария</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-4.jpg')"></div>
+            <h4 class="instructor-name">Козлов Дмитрий</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-5.jpg')"></div>
+            <h4 class="instructor-name">Новикова Анна</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo" style="background-image: url('images/instructor-6.jpg')"></div>
+            <h4 class="instructor-name">Морозов Артём</h4>
+            <span class="instructor-spec">Лыжи</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-bottom">
+        <button class="btn btn-outline btn-wide" onclick="navigateTo('main')" data-i18n="common.back">НАЗАД</button>
+      </div>
+    </div>
+
+    <!-- Выбор способа оплаты -->
+    <div class="screen" id="screen-payment" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <header class="header">
+        <div class="header-left">
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="pay-wrap">
+        <div class="pay-card">
+          <h2 class="pay-title" data-i18n="pay.title">Оплата</h2>
+          <p class="pay-amount"><span data-i18n="pay.amount">К оплате:</span> <span id="pay-total-value">0 ₽</span></p>
+
+          <!-- Ваш заказ -->
+          <div class="pay-order-summary" id="pay-order-summary">
+            <div class="pay-order-header">
+              <span class="pay-order-title" data-i18n="pay.order_title">Ваш заказ</span>
+              <i data-lucide="receipt" class="pay-order-icon"></i>
+            </div>
+            <div class="pay-order-divider"></div>
+            <div class="pay-order-items" id="pay-order-items">
+              <!-- Заполняется динамически из JS -->
+            </div>
+          </div>
+
+          <!-- Статус оплаты -->
+          <div class="pay-status" id="pay-status">
+            <div class="payment-spinner"></div>
+            <p class="pay-status-text" data-i18n="pay.card_hint">Приложите карту или телефон к терминалу оплаты</p>
+            <p class="pay-status-hint" data-i18n="pay.cancel_hint">Для отмены нажмите красную кнопку на терминале</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- СБП — QR-код для оплаты -->
+    <div class="screen" id="screen-sbp">
+      <header class="header header--inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="cancelSBP()"><i data-lucide="arrow-left"></i></button>
+          <img src="images/VG_logo_masked.svg" class="header-logo-img header-logo-img--sm" alt="Воробьёвы Горы">
+        </div>
+        <div class="header-right">
+          <button class="lang-btn" onclick="toggleLangDropdown(event)"><img class="lang-current-flag" src="images/flags/ru.svg" alt="Lang"></button>
+        </div>
+      </header>
+
+      <div class="sbp-wrap">
+        <div class="sbp-card">
+          <div class="sbp-badge" data-i18n="sbp.badge">СБП</div>
+          <h2 class="sbp-title" data-i18n="sbp.title">Отсканируйте QR-код</h2>
+          <p class="sbp-subtitle" data-i18n="sbp.subtitle">Откройте приложение банка и отсканируйте код</p>
+          <div class="sbp-qr-wrap">
+            <canvas id="sbp-qr-canvas" width="280" height="280"></canvas>
+          </div>
+          <p class="sbp-amount"><span data-i18n="sbp.amount">К оплате:</span> <span id="sbp-amount-value">0 ₽</span></p>
+          <div class="sbp-timer">
+            <i data-lucide="clock" class="sbp-timer-icon"></i>
+            <span data-i18n="sbp.waiting">Ожидание оплаты:</span> <span id="sbp-countdown">120</span> <span data-i18n="sbp.sec">сек.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sbp-bottom">
+        <button class="scan-back-btn" onclick="cancelSBP()" data-i18n="common.cancel">ОТМЕНА</button>
+      </div>
+    </div>
+
+    <!-- Экран успешной оплаты -->
+    <div class="screen" id="screen-success" style="background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),url('images/bg_terminal.png') center/cover no-repeat">
+      <div class="success-wrap">
+        <div class="success-card">
+          <div class="success-icon-wrap">
+            <svg class="success-check" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="38" stroke="#2ECC71" stroke-width="4"/>
+              <path d="M24 40L35 51L56 30" stroke="#2ECC71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="success-title" data-i18n="success.title">Покупка успешно оплачена</h2>
+          <p class="success-subtitle" data-i18n="success.subtitle">Спасибо за покупку!</p>
+
+          <div class="success-receipt-divider"></div>
+
+          <!-- Вопрос о чеке — внутри карточки -->
+          <div class="success-receipt-question" id="success-receipt-question">
+            <p class="success-receipt-title" data-i18n="success.receipt_question">Нужно отправить чек по электронной почте?</p>
+            <div class="success-receipt-buttons" id="success-receipt-buttons">
+              <button class="success-receipt-btn success-receipt-btn--no" onclick="receiptNo()" data-i18n="success.no_thanks">Спасибо, не нужно</button>
+              <button class="success-receipt-btn success-receipt-btn--yes" onclick="receiptYes()" data-i18n="success.yes">Да</button>
+            </div>
+          </div>
+
+          <!-- Форма ввода email (скрыта по умолчанию) -->
+          <div class="success-receipt-email" id="success-receipt-email" style="display:none;">
+            <input type="email" class="receipt-email-input" id="receipt-email-input" placeholder="Введите email" data-i18n-placeholder="success.email_placeholder" readonly>
+            <div class="vkb" id="virtual-keyboard">
+              <div class="vkb-row">
+                <button class="vkb-key" data-key="1">1</button>
+                <button class="vkb-key" data-key="2">2</button>
+                <button class="vkb-key" data-key="3">3</button>
+                <button class="vkb-key" data-key="4">4</button>
+                <button class="vkb-key" data-key="5">5</button>
+                <button class="vkb-key" data-key="6">6</button>
+                <button class="vkb-key" data-key="7">7</button>
+                <button class="vkb-key" data-key="8">8</button>
+                <button class="vkb-key" data-key="9">9</button>
+                <button class="vkb-key" data-key="0">0</button>
+              </div>
+              <div class="vkb-row">
+                <button class="vkb-key" data-key="q">q</button>
+                <button class="vkb-key" data-key="w">w</button>
+                <button class="vkb-key" data-key="e">e</button>
+                <button class="vkb-key" data-key="r">r</button>
+                <button class="vkb-key" data-key="t">t</button>
+                <button class="vkb-key" data-key="y">y</button>
+                <button class="vkb-key" data-key="u">u</button>
+                <button class="vkb-key" data-key="i">i</button>
+                <button class="vkb-key" data-key="o">o</button>
+                <button class="vkb-key" data-key="p">p</button>
+              </div>
+              <div class="vkb-row">
+                <button class="vkb-key" data-key="a">a</button>
+                <button class="vkb-key" data-key="s">s</button>
+                <button class="vkb-key" data-key="d">d</button>
+                <button class="vkb-key" data-key="f">f</button>
+                <button class="vkb-key" data-key="g">g</button>
+                <button class="vkb-key" data-key="h">h</button>
+                <button class="vkb-key" data-key="j">j</button>
+                <button class="vkb-key" data-key="k">k</button>
+                <button class="vkb-key" data-key="l">l</button>
+              </div>
+              <div class="vkb-row">
+                <button class="vkb-key" data-key="z">z</button>
+                <button class="vkb-key" data-key="x">x</button>
+                <button class="vkb-key" data-key="c">c</button>
+                <button class="vkb-key" data-key="v">v</button>
+                <button class="vkb-key" data-key="b">b</button>
+                <button class="vkb-key" data-key="n">n</button>
+                <button class="vkb-key" data-key="m">m</button>
+                <button class="vkb-key vkb-key--wide" data-action="backspace">&#9003;</button>
+              </div>
+              <div class="vkb-row">
+                <button class="vkb-key vkb-key--sym" data-key="@">@</button>
+                <button class="vkb-key vkb-key--sym" data-key=".">.</button>
+                <button class="vkb-key vkb-key--sym" data-key="-">-</button>
+                <button class="vkb-key vkb-key--sym" data-key="_">_</button>
+                <button class="vkb-key vkb-key--send" onclick="receiptSendEmail()" data-i18n="success.send">ОТПРАВИТЬ</button>
+              </div>
+            </div>
+            <button class="success-receipt-back" onclick="receiptBackToButtons()" data-i18n="success.back">← Назад</button>
+          </div>
+
+          <div class="success-timer">
+            <span data-i18n="success.auto_return">Автовозврат через</span> <span id="success-countdown">15</span> <span data-i18n="success.sec">сек.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Лоадер печати билетов (полноэкранный, вне screen-success) -->
+    <div class="print-loader" id="print-loader">
+      <div class="print-loader-content">
+        <div class="print-spinner"></div>
+        <p class="print-loader-text" data-i18n="print.printing">Печать билетов...</p>
+        <p class="print-loader-count" id="print-loader-count"></p>
+      </div>
+    </div>
+
+    <!-- Область печати билета (видна только через @media print) -->
+    <div id="print-area"></div>
+
+    <!-- Toast/Alert -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <!-- Модалка бездействия -->
+  <div class="inactivity-modal" id="inactivity-modal">
+    <div class="inactivity-modal-card">
+      <p class="inactivity-modal-text"><span data-i18n="inactivity.before_countdown">Через</span> <span id="inactivity-countdown">10</span> <span data-i18n="inactivity.after_countdown">секунд экран перейдет в режим ожидания</span></p>
+      <p class="inactivity-modal-hint" data-i18n="inactivity.hint">Нажмите на экран, чтобы продолжить</p>
+      <div class="inactivity-modal-buttons">
+        <button class="inactivity-btn inactivity-btn--continue" onclick="dismissInactivity()" data-i18n="inactivity.continue">Продолжить</button>
+        <button class="inactivity-btn inactivity-btn--exit" onclick="goToSplashNow()" data-i18n="inactivity.to_main">На главный экран</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Language dropdown (global, one instance) -->
+  <div class="lang-dropdown" id="lang-dropdown">
+    <button class="lang-option" onclick="setLanguage('ru')"><img src="images/flags/ru.svg" class="lang-flag" alt=""> Русский</button>
+    <button class="lang-option" onclick="setLanguage('en')"><img src="images/flags/en.svg" class="lang-flag" alt=""> English</button>
+    <button class="lang-option" onclick="setLanguage('ar')"><img src="images/flags/ar.svg" class="lang-flag" alt=""> العربية</button>
+    <button class="lang-option" onclick="setLanguage('zh')"><img src="images/flags/zh.svg" class="lang-flag" alt=""> 中文</button>
+  </div>
+
+  <script src="lucide.min.js?v=20260330"></script>
+  <script src="i18n.js?v=20260330"></script>
+  <script src="qrcode.min.js?v=20260330"></script>
+  <script src="ticket-service.js?v=20260330"></script>
+  <script src="app.js?v=20260330"></script>
+</body>
+</html>

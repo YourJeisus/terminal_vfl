@@ -1,0 +1,162 @@
+{
+  "_meta": {
+    "language": "English",
+    "code": "en",
+    "direction": "ltr",
+    "note": "English translation for TERMINAL_VG kiosk at Vorobyovy Gory sports complex."
+  },
+
+  "common": {
+    "_context": "Common buttons and labels used across multiple screens",
+    "back": "BACK",
+    "pay": "PAY",
+    "cancel": "CANCEL",
+    "total": "Total:",
+    "buy_ticket": "Buy ticket"
+  },
+
+  "splash": {
+    "_context": "Screensaver screen shown when the terminal is idle. User taps to start.",
+    "cta": "Touch the screen",
+    "cta_sub": "TO START"
+  },
+
+  "main": {
+    "_context": "Main menu with 4 entertainment cards. Each card has a photo, title, and short description.",
+    "cable_car": "Cable Car",
+    "cable_car_desc": "A striking landmark of the capital",
+    "alpaka": "Alpaca Park",
+    "alpaka_desc": "Meet friendly animals",
+    "museum": "Museum of Illusions",
+    "museum_desc": "Interactive experience",
+    "skypark": "Skypark",
+    "skypark_desc": "Zipline spanning 700 meters"
+  },
+
+  "info": {
+    "_context": "Info cards on the main screen: weather, visitor count, opening hours",
+    "weather": "Weather",
+    "time": "Time"
+  },
+
+  "scan": {
+    "_context": "Card scanning screen. User places their ski pass on the reader.",
+    "title_line1": "Place your card",
+    "title_line2": "on the reader",
+    "hint": "Hold the ski pass near the reader area"
+  },
+
+  "topup": {
+    "_context": "Ski pass top-up screen. Contains tariffs by day type and age group.",
+    "title": "Top up ski pass",
+    "season": "Season 2025/26",
+    "tab_weekdays": "Weekdays (Mon–Fri)",
+    "tab_weekends": "Weekends / Holidays",
+    "adult": "Adult",
+    "adult_age": "15 years and older",
+    "child": "Child",
+    "child_age": "7–14 years",
+    "discount": "Reduced",
+    "discount_desc": "seniors, students, disabled",
+    "before_16": "before 4 PM",
+    "after_16": "after 4 PM",
+    "day_evening": "day + evening",
+    "select_hint": "Select a tariff to top up"
+  },
+
+  "tickets": {
+    "_context": "Ticket purchase screens. Titles/descriptions are loaded from API, these are static fallbacks.",
+    "unavailable": "Tickets are temporarily unavailable",
+    "cable_car_desc": "The cable car at Vorobyovy Gory is a unique attraction offering panoramic views of Moscow. The route spans 720 meters over the Moscow River. Cabins feature panoramic glazing.",
+    "alpaka_desc": "Alpaca Park is a cozy natural spot with friendly alpacas. Feed the animals, take photos, and relax with the whole family. A perfect place for a walk with children.",
+    "museum_desc": "The Museum of Illusions is an interactive space with optical illusions, mirror mazes, and extraordinary installations. Vivid experiences and great photos for the entire family.",
+    "skypark_desc": "Skypark is an extreme adventure park with a zipline over the Moscow River. Flight speed up to 40 km/h at a height of 60 meters. Unforgettable thrills and breathtaking views."
+  },
+
+  "rental": {
+    "_context": "Equipment rental screen. Category tabs, day type/time toggles, quantity counters.",
+    "title": "Equipment Rental",
+    "tab_set": "Full set",
+    "tab_ski": "Skis",
+    "tab_boots": "Boots",
+    "tab_more": "More",
+    "day_type": "Day type",
+    "weekdays": "Weekdays (Mon–Fri)",
+    "weekends": "Weekends",
+    "duration": "Rental duration",
+    "hour_1": "1 hour",
+    "min_30": "+30 min",
+    "quantity": "Number of sets",
+    "adult": "Adult",
+    "child": "Child"
+  },
+
+  "instructors": {
+    "_context": "Instructor list screen. Tabs by specialization.",
+    "title": "Instructor List",
+    "tab_ski": "Skiing",
+    "tab_snowboard": "Snowboard",
+    "spec_ski": "Skiing"
+  },
+
+  "pay": {
+    "_context": "Payment screen. Shows total amount, order details, and payment methods.",
+    "title": "Payment",
+    "amount": "To pay:",
+    "order_title": "Your order",
+    "card_hint": "Place your card or phone on the payment terminal",
+    "cancel_hint": "Press the red button on the terminal to cancel",
+    "processing": "Processing payment..."
+  },
+
+  "sbp": {
+    "_context": "SBP (Fast Payment System) screen. QR code for payment via banking app.",
+    "badge": "SBP",
+    "title": "Scan the QR code",
+    "subtitle": "Open your banking app and scan the code",
+    "amount": "To pay:",
+    "waiting": "Waiting for payment:",
+    "sec": "sec."
+  },
+
+  "success": {
+    "_context": "Successful payment screen. Offers to send receipt via email. Auto-returns to main after 15 seconds.",
+    "title": "Purchase completed successfully",
+    "subtitle": "Thank you for your purchase!",
+    "receipt_question": "Would you like to receive a receipt by email?",
+    "no_thanks": "No, thank you",
+    "yes": "Yes",
+    "email_placeholder": "Enter email",
+    "send": "SEND",
+    "back": "← Back",
+    "auto_return": "Auto-return in",
+    "sec": "sec."
+  },
+
+  "print": {
+    "_context": "Ticket printing modal. Shown while the thermal printer prints tickets.",
+    "printing": "Printing tickets...",
+    "of": "of"
+  },
+
+  "inactivity": {
+    "_context": "Inactivity modal. Appears after 20 seconds of no interaction. 10-second countdown to standby.",
+    "before_countdown": "In",
+    "after_countdown": "seconds the screen will go to standby",
+    "hint": "Tap the screen to continue",
+    "continue": "Continue",
+    "to_main": "Back to main screen"
+  },
+
+  "alerts": {
+    "_context": "Toast notifications. Appear at the bottom of the screen for 2.5 seconds.",
+    "select_item": "Please select at least one item",
+    "payment_declined": "Payment declined",
+    "payment_timeout": "Payment timed out",
+    "connection_error": "Payment terminal connection error",
+    "sbp_timeout": "Waiting time expired",
+    "invalid_email": "Enter a valid email",
+    "receipt_sent": "Receipt sent to {email}",
+    "ticket_error": "Ticket creation error"
+  }
+}

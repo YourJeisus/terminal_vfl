@@ -1,0 +1,163 @@
+{
+  "_meta": {
+    "language": "中文",
+    "code": "zh",
+    "direction": "ltr",
+    "note": "Chinese (Simplified) translation for TERMINAL_VG kiosk at Vorobyovy Gory sports complex."
+  },
+
+  "common": {
+    "_context": "多个页面中使用的通用按钮和标签",
+    "back": "返回",
+    "pay": "支付",
+    "cancel": "取消",
+    "total": "合计：",
+    "buy_ticket": "购买门票"
+  },
+
+  "splash": {
+    "_context": "屏保界面。终端空闲时显示。用户触摸屏幕开始操作。",
+    "cta": "触摸屏幕",
+    "cta_sub": "开始使用"
+  },
+
+  "main": {
+    "_context": "主菜单，包含4张娱乐项目卡片",
+    "cable_car": "索道",
+    "cable_car_desc": "首都的著名地标",
+    "alpaka": "羊驼公园",
+    "alpaka_desc": "与友好的动物互动",
+    "museum": "幻觉博物馆",
+    "museum_desc": "互动体验空间",
+    "skypark": "天空公园",
+    "skypark_desc": "700米高空滑索"
+  },
+
+  "info": {
+    "_context": "主页信息卡片：天气、当前游客、营业时间",
+    "weather": "天气",
+    "visitors": "当前",
+    "time": "时间"
+  },
+
+  "scan": {
+    "_context": "刷卡页面。用户将滑雪卡放到读卡器上。",
+    "title_line1": "请将卡片",
+    "title_line2": "放在读卡器上",
+    "hint": "将滑雪卡靠近读卡区域"
+  },
+
+  "topup": {
+    "_context": "滑雪卡充值页面。按日期类型和年龄组分类的费率。",
+    "title": "滑雪卡充值",
+    "season": "2025/26赛季",
+    "tab_weekdays": "工作日（周一至周五）",
+    "tab_weekends": "周末/节假日",
+    "adult": "成人",
+    "adult_age": "15岁及以上",
+    "child": "儿童",
+    "child_age": "7–14岁",
+    "discount": "优惠",
+    "discount_desc": "老年人、学生、残疾人",
+    "before_16": "16:00前",
+    "after_16": "16:00后",
+    "day_evening": "全天+晚间",
+    "select_hint": "请选择充值费率"
+  },
+
+  "tickets": {
+    "_context": "购票页面。标题和描述从服务器加载，以下为静态默认文字。",
+    "unavailable": "门票暂时不可用",
+    "cable_car_desc": "麻雀山索道——独特的观光项目，可欣赏莫斯科全景。线路全长720米，横跨莫斯科河上方。缆车配备全景玻璃。",
+    "alpaka_desc": "羊驼公园——一个温馨的自然角落，住着友好的羊驼。您可以喂养动物、拍照，与家人一起放松。非常适合带孩子散步。",
+    "museum_desc": "幻觉博物馆——一个互动空间，拥有视觉错觉、镜子迷宫和奇妙装置。为全家带来精彩体验和绝佳照片。",
+    "skypark_desc": "天空公园——莫斯科河上的极限冒险公园。滑索飞行速度可达40公里/小时，高度60米。令人难忘的刺激和壮观的景色。"
+  },
+
+  "rental": {
+    "_context": "设备租赁页面",
+    "title": "设备租赁",
+    "tab_set": "套装",
+    "tab_ski": "滑雪板",
+    "tab_boots": "滑雪靴",
+    "tab_more": "更多",
+    "day_type": "日期类型",
+    "weekdays": "工作日（周一至周五）",
+    "weekends": "周末",
+    "duration": "租赁时长",
+    "hour_1": "1小时",
+    "min_30": "+30分钟",
+    "quantity": "套装数量",
+    "adult": "成人",
+    "child": "儿童"
+  },
+
+  "instructors": {
+    "_context": "教练列表页面",
+    "title": "教练列表",
+    "tab_ski": "滑雪",
+    "tab_snowboard": "单板滑雪",
+    "spec_ski": "滑雪"
+  },
+
+  "pay": {
+    "_context": "支付页面。显示总金额、订单详情和支付方式。",
+    "title": "支付",
+    "amount": "应付金额：",
+    "order_title": "您的订单",
+    "card_hint": "请将银行卡或手机靠近支付终端",
+    "cancel_hint": "如需取消，请按终端上的红色按钮",
+    "processing": "正在处理支付..."
+  },
+
+  "sbp": {
+    "_context": "快速支付系统页面。通过银行应用扫描二维码支付。",
+    "badge": "SBP",
+    "title": "扫描二维码",
+    "subtitle": "打开银行应用并扫描二维码",
+    "amount": "应付金额：",
+    "waiting": "等待支付：",
+    "sec": "秒"
+  },
+
+  "success": {
+    "_context": "支付成功页面。提供通过邮件发送收据的选项。15秒后自动返回主页。",
+    "title": "购买成功",
+    "subtitle": "感谢您的购买！",
+    "receipt_question": "是否需要通过邮件接收收据？",
+    "no_thanks": "不需要，谢谢",
+    "yes": "是的",
+    "email_placeholder": "输入邮箱地址",
+    "send": "发送",
+    "back": "← 返回",
+    "auto_return": "自动返回",
+    "sec": "秒"
+  },
+
+  "print": {
+    "_context": "门票打印弹窗",
+    "printing": "正在打印门票...",
+    "of": "/"
+  },
+
+  "inactivity": {
+    "_context": "闲置提醒弹窗。20秒无操作后出现。10秒倒计时。",
+    "before_countdown": "还有",
+    "after_countdown": "秒后屏幕将进入待机模式",
+    "hint": "触摸屏幕以继续",
+    "continue": "继续",
+    "to_main": "返回主页"
+  },
+
+  "alerts": {
+    "_context": "弹出通知，显示在屏幕底部，持续2.5秒",
+    "select_item": "请至少选择一个项目",
+    "payment_declined": "支付被拒绝",
+    "payment_timeout": "支付超时",
+    "connection_error": "支付终端连接错误",
+    "sbp_timeout": "等待超时",
+    "invalid_email": "请输入有效的邮箱地址",
+    "receipt_sent": "收据已发送至 {email}",
+    "ticket_error": "创建门票失败"
+  }
+}

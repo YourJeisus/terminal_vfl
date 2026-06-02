@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Превью чека / билета</title>
+<style>
+  body {
+    margin: 0;
+    background: #444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 20px;
+    font-family: 'Gotham', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+  }
+  h1 { font-size: 18px; opacity: 0.6; margin: 0; }
+  h2 { font-size: 14px; opacity: 0.4; margin: 0; }
+  .section { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+  /* Canvas preview */
+  #ticket-canvas-img {
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  /* HTML preview */
+  .preview {
+    background: #fff;
+    width: 80mm;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .t { padding: 4mm 5mm 5mm; width: 100%; font-family: 'Gotham', Arial, sans-serif; }
+  .logo { display: block; width: 60%; max-width: 180px; height: auto; margin: 0 auto 3mm; }
+  .ln { width: 100%; height: 2px; background: #000; }
+  .tw { text-align: center; padding: 3mm 0 2mm; }
+  .tt { font-size: 22px; font-weight: 900; color: #000; }
+  .tp { font-size: 11px; font-weight: 800; color: #000; margin-top: 2mm; }
+  .it { padding: 3mm 0; }
+  .ir { display: flex; justify-content: space-between; margin-bottom: 1.5mm; font-size: 11px; color: #000; }
+  .il { font-weight: 700; }
+  .iv { font-weight: 800; }
+  .ss { text-align: center; padding: 3mm 0 2mm; }
+  .st { font-size: 11px; font-weight: 800; color: #000; margin-bottom: 3mm; }
+  .qb { width: 55%; margin: 0 auto; background: #f0f0f0; border: 1px solid #ccc; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #aaa; font-weight: 900; }
+  .ct { padding: 1mm 0; font-size: 11px; color: #000; font-weight: 800; text-align: center; }
+</style>
+</head><body>
+
+<h1>Превью чека / билета</h1>
+
+<!-- Section 1: Canvas render (как на термопринтере) -->
+<div class="section">
+  <h2>Canvas (термопринтер)</h2>
+  <p id="status" style="font-size:14px;opacity:0.4">Загрузка логотипа...</p>
+  <img id="ticket-canvas-img" style="display:none">
+</div>
+
+<!-- Section 2: HTML render (как в window.print fallback) -->
+<div class="section">
+  <h2>HTML (браузерная печать)</h2>
+  <div class="preview">
+    <div class="t">
+      <img class="logo" src="images/VG_logo_dark_masked.svg">
+      <div class="ln"></div>
+      <div class="tw">
+        <div class="tt">Билет</div>
+        <div class="tp">[Детский] Туда-Обратно + Парк альпак</div>
+      </div>
+      <div class="ln"></div>
+      <div class="it">
+        <div class="ir"><span class="il">Стоимость</span><span class="iv">1400</span></div>
+        <div class="ir"><span class="il">Кассир</span><span class="iv">Ермолова Наталья</span></div>
+        <div class="ir"><span class="il">Дата</span><span class="iv">23.02.2026 11:32</span></div>
+        <div class="ir"><span class="il">Номер</span><span class="iv">VG-260223-472923</span></div>
+      </div>
+      <div class="ln"></div>
+      <div class="ss">
+        <div class="st">Для прохода - отсканируйте этот код:</div>
+        <div class="qb">QR CODE</div>
+      </div>
+      <div class="ln" style="margin-top:3mm;height:2px"></div>
+      <div style="display:flex;justify-content:space-between;padding:3mm 0 0;font-size:11px;font-weight:800;color:#000">
+        <span>+7 (495) 123-82-61</span>
+        <span>srkvg.ru</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="qrcode.min.js"></script>
+<script src="ticket-service.js"></script>
+<script>
+  TicketService.preloadLogo();
+  setTimeout(function() {
+    var ticket = {
+      type: '[Детский] Туда-Обратно + Парк альпак',
+      totalPrice: 1400,
+      cashier: 'Ермолова Наталья',
+      date: '23.02.2026 11:32',
+      number: 'VG-260223-472923'
+    };
+    try {
+      var dataURL = TicketService._renderTicketCanvas(ticket);
+      var img = document.getElementById('ticket-canvas-img');
+      img.src = dataURL;
+      img.style.display = 'block';
+      document.getElementById('status').style.display = 'none';
+    } catch(e) {
+      document.getElementById('status').textContent = 'Ошибка: ' + e.message;
+      console.error(e);
+    }
+  }, 1500);
+</script>
+</body></html>
