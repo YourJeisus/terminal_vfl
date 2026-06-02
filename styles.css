@@ -654,6 +654,10 @@ body {
   flex: 1;
 }
 
+.ent-grid[hidden] {
+  display: none !important;
+}
+
 .ent-card {
   position: relative;
   display: flex;
