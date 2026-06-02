@@ -85,11 +85,11 @@ def print_image_gdi(img_bytes):
         dpi_x = hdc.GetDeviceCaps(88)         # LOGPIXELSX
         dpi_y = hdc.GetDeviceCaps(90)         # LOGPIXELSY
 
-        # Restore the driver-compatible GDI sizing path, but keep detailed logs.
-        # Some thermal drivers do not visibly print when drawing from x=0 or
-        # when the bitmap is not mapped to the driver's reported page area.
+        # Thermal printer drivers may report a large logical page
+        # (for example A4). Never upscale the receipt to that size.
         w, h = img.size
-        ratio = min(page_w / w, page_h / h)
+        target_w = printable_w or page_w or w
+        ratio = min(1.0, target_w / w)
         new_w = int(w * ratio)
         new_h = int(h * ratio)
 
@@ -101,7 +101,9 @@ def print_image_gdi(img_bytes):
             f"draw={new_w}x{new_h}, ratio={ratio:.3f}"
         )
 
-        x = (page_w - new_w) // 2
+        # Align to the left edge. Centering on a bogus wide page can move
+        # the receipt away from the actual thermal paper area.
+        x = 0
         y = 0
 
         dib = ImageWin.Dib(img)
